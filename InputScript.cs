@@ -22,13 +22,9 @@ public class InputScript : MonoBehaviour
 
         IPEndPoint ipEndPoint = new(ipAddress, 8000);
 
+        UdpClient udpClient = new UdpClient(8000);
 
-        client = new(
-        ipEndPoint.AddressFamily,
-        SocketType.Stream,
-        ProtocolType.Tcp);
-
-        await client.ConnectAsync(ipEndPoint);
+        udpClient.Connect(ipEndPoint);
 
     }
 
@@ -40,7 +36,8 @@ public class InputScript : MonoBehaviour
 
 
         var messageBytes = Encoding.UTF8.GetBytes(message);
-        _ = await client.SendAsync(messageBytes, SocketFlags.None);
+
+        await udpClient.SendAsync(message, messageBytes);
 
         // Receive ack.
         var buffer = new byte[1024];
@@ -55,9 +52,6 @@ public class InputScript : MonoBehaviour
         // Sample output:
         //     Socket client sent message: "Hi friends"
         //     Socket client received acknowledgment: "ACK"
-
-
-        client.Shutdown(SocketShutdown.Both);
 
         
     }

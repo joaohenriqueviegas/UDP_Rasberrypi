@@ -55,7 +55,7 @@ def server_thread(name):
 
     listensocket = socket.socket() #Creates an instance of socket
     Port = 8000 #Port to host server on
-    maxConnections = 999
+    maxConnections = 10
     hostname = socket.gethostname() #IP address of local machine
     IP=socket.gethostbyname(hostname)
 
@@ -70,15 +70,20 @@ def server_thread(name):
     while True:
         #Accepts the incomming connection
         (clientsocket, address) = listensocket.accept()
-        print("New connection made!", address)
+        print("New connection made!")
         
         message = clientsocket.recv(1024).decode() #Gets the incomming message
+        print(message)
         
         value = str(Tree_Size)
-        print(message,value)
+        print(value)
         clientsocket.sendall(value.encode("utf-8"))
+        #if not message == "":
+            #GPIO.output(7,True)
+            #time.sleep(5)
+            #GPIO.output(7,False)
+
         
-        socket.close()
 
 x = threading.Thread(target=server_thread, args=(1,))
 

@@ -70,20 +70,13 @@ def server_thread(name):
     while True:
         #Accepts the incomming connection
         (clientsocket, address) = listensocket.accept()
-        print("New connection made!")
+        print("New connection made!", address)
         
         message = clientsocket.recv(1024).decode() #Gets the incomming message
-        print(message)
         
         value = str(Tree_Size)
-        print(value)
+        print(message,value)
         clientsocket.sendall(value.encode("utf-8"))
-        #if not message == "":
-            #GPIO.output(7,True)
-            #time.sleep(5)
-            #GPIO.output(7,False)
-
-        
 
 x = threading.Thread(target=server_thread, args=(1,))
 

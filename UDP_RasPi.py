@@ -65,13 +65,12 @@ def server_thread(name):
     listensocket.listen(maxConnections)
     print("Server started at " + IP + " on port " + str(Port))
 
-    
+    #Accepts the incomming connection
+    (clientsocket, address) = listensocket.accept()
+    print("New connection made!")
     
     while True:
-        #Accepts the incomming connection
-        (clientsocket, address) = listensocket.accept()
-        print("New connection made!")
-        
+            
         message = clientsocket.recv(1024).decode() #Gets the incomming message
         print(message)
         

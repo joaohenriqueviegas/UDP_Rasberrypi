@@ -77,6 +77,8 @@ def server_thread(name):
         value = str(Tree_Size)
         print(message,value)
         clientsocket.sendall(value.encode("utf-8"))
+        
+        socket.close()
 
 x = threading.Thread(target=server_thread, args=(1,))
 

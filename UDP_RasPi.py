@@ -51,8 +51,10 @@ delay_value = 0.025
 GPIO.output(LED_PIN, GPIO.LOW)
 
 def server_thread(name):
-        #Create UDP Socket
-
+    print("Client " + name + " connected")
+    
+    #Create TCP Socket
+    
     listensocket = socket.socket() #Creates an instance of socket
     Port = 8000 #Port to host server on
     maxConnections = 10
@@ -64,31 +66,36 @@ def server_thread(name):
     #Starts server
     listensocket.listen(maxConnections)
     print("Server started at " + IP + " on port " + str(Port))
-
+    
     #Accepts the incomming connection
-    (clientsocket, address) = listensocket.accept()
+    try:
+        (clientsocket, address) = listensocket.accept()
+    except:
+        server_thread(1)
+    
     print("New connection made!")
     
     while True:
             
-        message = clientsocket.recv(1024).decode() #Gets the incomming message
+        try:
+            message = clientsocket.recv(1024).decode() #Gets the incomming message
+        except:
+            server_thread(name)
         print(message)
-        
+            
         value = str(Tree_Size)
         print(value)
-        clientsocket.sendall(value.encode("utf-8"))
-        #if not message == "":
-            #GPIO.output(7,True)
-            #time.sleep(5)
-            #GPIO.output(7,False)
-
         
+        try:
+            clientsocket.sendall(value.encode("utf-8"))
+        except:
+            server_thread(name) 
 
 x = threading.Thread(target=server_thread, args=(1,))
-
-logging.info("Main    : before running thread")
+y = threading.Thread(target=server_thread, args=(2,))
 
 x.start()
+y.start()
 
 while True:
     GPIO.output(SNS1_TRIGGER, GPIO.HIGH)

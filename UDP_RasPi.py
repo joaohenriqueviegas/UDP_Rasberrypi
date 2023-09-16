@@ -51,21 +51,7 @@ delay_value = 0.025
 GPIO.output(LED_PIN, GPIO.LOW)
 
 def server_thread(name):
-    print("Client " + name + " connected")
-    
-    #Create TCP Socket
-    
-    listensocket = socket.socket() #Creates an instance of socket
-    Port = 8000 #Port to host server on
-    maxConnections = 10
-    hostname = socket.gethostname() #IP address of local machine
-    IP=socket.gethostbyname(hostname)
-
-    listensocket.bind(('',Port))
-
-    #Starts server
-    listensocket.listen(maxConnections)
-    print("Server started at " + IP + " on port " + str(Port))
+    print("Client " + str(name) + " connected")
     
     #Accepts the incomming connection
     try:
@@ -73,7 +59,7 @@ def server_thread(name):
     except:
         server_thread(1)
     
-    print("New connection made!")
+    print("New connection made at thread " + str(name))
     
     while True:
             
@@ -90,6 +76,21 @@ def server_thread(name):
             clientsocket.sendall(value.encode("utf-8"))
         except:
             server_thread(name) 
+
+
+#Create TCP Socket
+    
+listensocket = socket.socket() #Creates an instance of socket
+Port = 8000 #Port to host server on
+maxConnections = 10
+hostname = socket.gethostname() #IP address of local machine
+IP=socket.gethostbyname(hostname)
+
+listensocket.bind(('',Port))
+
+#Starts server
+listensocket.listen(maxConnections)
+print("Server started at " + IP + " on port " + str(Port))
 
 x = threading.Thread(target=server_thread, args=(1,))
 y = threading.Thread(target=server_thread, args=(2,))
